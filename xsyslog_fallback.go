@@ -1,25 +1,14 @@
-//go:build !darwin
+//go:build !darwin && !windows && !plan9
 
 package xsyslog
 
 import (
-	"log"
 	"log/syslog"
 )
 
-type Writer struct {
-	*syslog.Writer
-}
+type Writer = syslog.Writer
 
-func New(priority syslog.Priority, tag string) (*Writer, error) {
-	s, err := syslog.New(priority, tag)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Writer{Writer: s}, nil
-}
-
-func NewLogger(p syslog.Priority, logFlag int) (*log.Logger, error) {
-	return syslog.NewLogger(p, logFlag)
-}
+var (
+	New       = syslog.New
+	NewLogger = syslog.NewLogger
+)
